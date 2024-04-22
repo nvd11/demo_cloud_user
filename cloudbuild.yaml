@@ -2,3 +2,8 @@ steps:
   - name: maven:3.3-jdk-21
     entrypoint: mvn
     args: ['--version']
+
+
+# https://stackoverflow.com/questions/68779751/error-publishing-source-code-from-cloud-build-to-a-bucket-using-triggers
+options:
+  logging: CLOUD_LOGGING_ONLY
