@@ -14,6 +14,10 @@ steps:
     entrypoint: mvn
     args: ['package', '-Dmaven.test.skip=true']
 
+  - id: build docker image
+    name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'europe-west2-docker.pkg.dev/jason-hsbc/my-docker-repo/demo-cloud-user', '.']
+
 # https://stackoverflow.com/questions/68779751/error-publishing-source-code-from-cloud-build-to-a-bucket-using-triggers
 options:
   logging: CLOUD_LOGGING_ONLY
