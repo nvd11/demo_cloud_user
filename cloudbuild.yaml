@@ -27,7 +27,7 @@ steps:
   - id: deploy image to cloud run
     name: 'gcr.io/cloud-builders/gcloud'
     args: ['run', 'deploy', 'demo-cloud-user',
-           '--image=europe-west2-docker.pkg.dev/$PROJECT_ID/my-docker-repo/demo-cloud-user:latest',
+           '--image=europe-west2-docker.pkg.dev/$PROJECT_ID/my-docker-repo/demo-cloud-user',
            '--port=8080',
            '--platform=managed',
            '--region=europe-west2',
