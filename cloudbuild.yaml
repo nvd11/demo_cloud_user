@@ -36,5 +36,5 @@ steps:
            '--key=projects/$PROJECT_ID/locations/europe-west2/keyRings/mykeyring/cryptoKeys/mycmek']
 # https://stackoverflow.com/questions/68779751/error-publishing-source-code-from-cloud-build-to-a-bucket-using-triggers
 logsBucket: gs://jason-hsbc_cloudbuild/logs/
-options:
-  logging: GCS_ONLY
+options: # https://cloud.google.com/cloud-build/docs/build-config#options
+  logging: GCS_ONLY # or CLOUD_LOGGING_ONLY https://cloud.google.com/cloud-build/docs/build-config#logging
