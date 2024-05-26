@@ -1,16 +1,16 @@
 steps:
   - id: check maven and jdk version
-    name: maven:3.9-sapmachine-21 # https://hub.docker.com/_/maven
+    name: maven:3.9.6-sapmachine-17 # https://hub.docker.com/_/maven
     entrypoint: mvn
     args: ['--version']
 
   - id: run maven test
-    name: maven:3.9-sapmachine-21 # https://hub.docker.com/_/maven
+    name: maven:3.9.6-sapmachine-17 # https://hub.docker.com/_/maven
     entrypoint: mvn
     args: ['test']
 
   - id: run maven package
-    name: maven:3.9-sapmachine-21 # https://hub.docker.com/_/maven
+    name: maven:3.9.6-sapmachine-17 # https://hub.docker.com/_/maven
     entrypoint: mvn
     args: ['package', '-Dmaven.test.skip=true']
 
