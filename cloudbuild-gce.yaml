@@ -1,0 +1,107 @@
+steps:
+
+
+  - id: prepare ssh private key file
+    name: 'ubuntu'
+    entrypoint: bash
+    args:
+      - '-c'
+      - 'echo $$SSH_PRIVATE_KEY > /workspace/ssh_key_file'
+    secretEnv:
+      - 'SSH_PRIVATE_KEY'
+
+  # - id: check maven and jdk version
+  #   name: maven:3.9.6-sapmachine-17 # https://hub.docker.com/_/maven
+  #   entrypoint: mvn
+  #   args: ['--version']
+
+  # - id: run maven test
+  #   name: maven:3.9.6-sapmachine-17 # https://hub.docker.com/_/maven
+  #   entrypoint: mvn
+  #   args: ['test']
+
+  # - id: run maven package
+  #   name: maven:3.9.6-sapmachine-17 # https://hub.docker.com/_/maven
+  #   entrypoint: mvn
+  #   args: ['package', '-Dmaven.test.skip=true']
+#
+  # # https://cloud.google.com/build/docs/configuring-builds/substitute-variable-values
+  # - id: build docker image
+  #   name: 'gcr.io/cloud-builders/docker'
+  #   args: ['build', '-t', 'europe-west2-docker.pkg.dev/$PROJECT_ID/my-docker-repo/demo-cloud-user', '.']
+  #   entrypoint: docker
+#
+  # - id: upload docker image to GAR
+  #   name: 'gcr.io/cloud-builders/docker'
+  #   args: [ 'push', 'europe-west2-docker.pkg.dev/$PROJECT_ID/my-docker-repo/demo-cloud-user']
+  #   entrypoint: docker
+
+  # deploy to Cloud run
+  # - id: deploy image to cloud run
+  #   name: 'gcr.io/cloud-builders/gcloud'
+  #   args: ['run', 'deploy', 'demo-cloud-user',
+  #          '--image=europe-west2-docker.pkg.dev/$PROJECT_ID/my-docker-repo/demo-cloud-user',
+  #          '--port=8080',
+  #          '--platform=managed',
+  #          '--region=europe-west2',
+  #          '--no-allow-unauthenticated',
+  #          '--service-account=vm-common@jason-hsbc.iam.gserviceaccount.com',
+  #          '--key=projects/$PROJECT_ID/locations/europe-west2/keyRings/mykeyring/cryptoKeys/mycmek']
+
+
+  # for how to use parameter - https://cloud.google.com/build/docs/configuring-builds/substitute-variable-values
+  # shutdown GCE Cloud run
+
+  # - id: shutdown GCE Cloud run
+  #   name: 'gcr.io/cloud-builders/gcloud'
+  #   args: ['compute', 'ssh', '${_VM_HOST}', '--', '"whoami"']
+  #   entrypoint: gcloud
+
+
+# https://cloud.google.com/build/docs/configuring-builds/pass-data-between-steps?hl=zh-cn
+
+
+  - id: shutdown GCE Cloud Run
+    name: 'gcr.io/cloud-builders/gcloud'
+    script: |
+      #!/bin/bash
+      set -e
+      echo "${SSH_PRIVATE_KEY}"
+    secretEnv:
+      - 'SSH_PRIVATE_KEY'
+
+  - id: shutdown GCE Cloud Run 2
+    name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: bash
+    args:
+      - '-c'
+      - 'echo $$SSH_PRIVATE_KEY'
+    secretEnv:
+      - 'SSH_PRIVATE_KEY'
+
+  # - id: shutdown GCE Cloud Run
+  #   name: 'gcr.io/cloud-builders/gcloud'
+  #   entrypoint: gcloud
+  #   args:
+  #     - |
+  #       compute ssh ${_VM_HOST} -- whoami
+
+
+# https://stackoverflow.com/questions/68779751/error-publishing-source-code-from-cloud-build-to-a-bucket-using-triggers
+
+logsBucket: gs://jason-hsbc_cloudbuild/logs/
+options: # https://cloud.google.com/cloud-build/docs/build-config#options
+  logging: GCS_ONLY # or CLOUD_LOGGING_ONLY https://cloud.google.com/cloud-build/docs/build-config#logging
+  # logging: CLOUD_LOGGING_ONLY # or CLOUD_LOGGING_ONLY https://cloud.google.com/cloud-build/docs/build-config#logging
+
+
+
+#
+# secrets:
+#   secretEnv:
+#     ssh-private-key: gateman-private-ssh-key
+# de
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/gateman-private-ssh-key/versions/latest
+      env: 'SSH_PRIVATE_KEY'
