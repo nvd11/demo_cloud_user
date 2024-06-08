@@ -33,7 +33,7 @@ public class UserController {
             ApiResponse<User> response = new ApiResponse<>();
             response.setData(user);
             response.setReturnCode(0);
-            response.setReturnMsg("User fetched successfully");
+            response.setReturnMsg("User fetched successfully ...");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             log.error("Error in queryById...", e);
