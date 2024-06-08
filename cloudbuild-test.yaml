@@ -1,5 +1,6 @@
 steps:
 
+  # to prepare ssh private key file
   - id: prepare ssh private key file
     name: 'ubuntu'
     entrypoint: bash
@@ -29,9 +30,6 @@ steps:
         chmod 600 /root/.ssh/id_rsa.pub
         set -x
         gcloud compute ssh gateman@${_VM_HOST} --zone=europe-west2-c --quiet --ssh-key-file=/root/.ssh/id_rsa -- "whoami" 
-        gcloud compute ssh gateman@${_VM_HOST} --zone=europe-west2-c --quiet --ssh-key-file=/root/.ssh/id_rsa -- "sudo docker ps -a" 
-        gcloud compute ssh gateman@${_VM_HOST} --zone=europe-west2-c --quiet --ssh-key-file=/root/.ssh/id_rsa -- "sudo docker container prune" 
-        gcloud compute ssh gateman@${_VM_HOST} --zone=europe-west2-c --quiet --ssh-key-file=/root/.ssh/id_rsa -- "sudo docker stop cloud_demo_user && sudo docker rm cloud_demo_user" 
         echo ok
 
   - id: shutdown GCE Cloud Run 3
@@ -40,12 +38,19 @@ steps:
     args:
       - '-c'
       - |
+        set -x
         whoami
         mkdir -p /root/.ssh
         cp /workspace/ssh_key_file /root/.ssh/id_rsa
         cp /workspace/ssh_key_file.pub /root/.ssh/id_rsa.pub
-        set -x
+        chmod 600 /root/.ssh/id_rsa
+        chmod 600 /root/.ssh/id_rsa.pub
+        touch /root/.ssh/google_compute_known_hosts
+        chmod 644 /root/.ssh/google_compute_known_hosts
         gcloud compute ssh gateman@${_VM_HOST} --zone=europe-west2-c --quiet --ssh-key-file=/root/.ssh/id_rsa -- "whoami" 
+        gcloud compute ssh gateman@${_VM_HOST} --zone=europe-west2-c --quiet --ssh-key-file=/root/.ssh/id_rsa -- "sudo docker container prune; sudo docker ps -a" 
+        gcloud compute ssh gateman@${_VM_HOST} --zone=europe-west2-c --quiet --ssh-key-file=/root/.ssh/id_rsa -- "sudo docker stop cloud_demo_user && sudo docker rm cloud_demo_user" 
+      
         echo ok
 
 
