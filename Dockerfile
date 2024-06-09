@@ -1,4 +1,3 @@
-复制
 # 使用基础镜像，包含 Oracle JDK 8
 FROM openjdk:17
 
