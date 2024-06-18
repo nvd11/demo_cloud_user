@@ -74,3 +74,4 @@ substitutions:
   _APP_TAG: latest
   _PORT: "8081"
   _APP_ENV: dev
+  _VM_HOST: "tf-vpc0-subnet0-vm0"
