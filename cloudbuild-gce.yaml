@@ -41,6 +41,7 @@ steps:
       - '-c'
       - |
         whoami
+        gcloud auth list
         set -x
         mkdir -p /root/.ssh
         gcloud secrets versions access latest --secret=gateman-private-ssh-key > /root/.ssh/id_rsa
