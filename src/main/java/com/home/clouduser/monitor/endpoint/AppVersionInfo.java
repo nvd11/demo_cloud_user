@@ -23,7 +23,7 @@ public class AppVersionInfo implements InfoContributor {
     @Override
     public void contribute(Info.Builder builder) {
         log.info("AppVersionInfo: contribute ...");
-        builder.withDetail("app", "Cloud User API - demo2024")
+        builder.withDetail("app", "Cloud User API - demo2024-10-31")
                 .withDetail("version", appVersion)
                 .withDetail("hostname",hostname)
                 .withDetail("dbUrl", dbUrl)
